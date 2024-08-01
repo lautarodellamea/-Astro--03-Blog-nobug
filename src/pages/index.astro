@@ -4,7 +4,8 @@ import { siteConfig } from '../config/site-config';
 import MainLayout from '../layouts/MainLayout.astro';
 import TypedBlogPost from 'src/components/TypedBlogPost.astro';
 
-const blogPosts = await getCollection('blog');
+// el segundo argumento del getCollection es una función que se ejecuta antes de devolver los datos, podemos filtrar datos
+const blogPosts = await getCollection('blog', (post) => post.data.isDraft === false);
 ---
 
 <MainLayout title="Fernando's Blog">
@@ -17,9 +18,21 @@ const blogPosts = await getCollection('blog');
         {siteConfig.title}
       </h1>
 
+      <a class="mr-2" href="/blog/1">Blog paginado</a>
+      <a class="mr-2" href="/authors">Autores</a>
+
       <div class="grid grid-cols-1 gap-8 mt-8 md:mt-16 md:grid-cols-2">
         {blogPosts.map((post) => <TypedBlogPost post={post} />)}
       </div>
     </div>
   </section>
 </MainLayout>
+
+
+<style>
+  a {
+    @apply text-blue-600  hover:underline;
+  }
+
+
+</style>
